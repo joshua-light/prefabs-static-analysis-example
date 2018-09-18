@@ -1,3 +1,5 @@
+using Editor.Analyzers;
+using Editor.Fixes;
 using Editor.Services;
 using UnityEditor;
 
@@ -26,6 +28,9 @@ namespace Editor
     {
       PrefabsAnalysis.Initialize();
       PrefabsAnalysisService.Initialize();
+      
+      PrefabsFixes.Initialize();
+      PrefabsFixesService.Initialize();
     }
   }
 }

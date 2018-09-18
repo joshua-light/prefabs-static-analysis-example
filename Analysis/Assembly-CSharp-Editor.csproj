@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\Editor\Analyzers\Core\GameObjectAnalyzer.cs" />
      <Compile Include="Assets\Scripts\Editor\Analyzers\Core\IAnalyzer.cs" />
      <Compile Include="Assets\Scripts\Editor\Analyzers\GameObjects\HiddenIsActiveAnalyzer.cs" />
+     <Compile Include="Assets\Scripts\Editor\Analyzers\PrefabsAnalysis.cs" />
      <Compile Include="Assets\Scripts\Editor\Common\GameObjectExtensions.cs" />
      <Compile Include="Assets\Scripts\Editor\Diagnostics\Core\Diagnostic.cs" />
      <Compile Include="Assets\Scripts\Editor\Diagnostics\Core\DiagnosticId.cs" />
@@ -72,9 +73,15 @@
      <Compile Include="Assets\Scripts\Editor\Diagnostics\WithComponentDiagnostic.cs" />
      <Compile Include="Assets\Scripts\Editor\Diagnostics\WithGameObjectDiagnostic.cs" />
      <Compile Include="Assets\Scripts\Editor\EditorRoot.cs" />
+     <Compile Include="Assets\Scripts\Editor\Fixes\Components\ContainsShadowFix.cs" />
+     <Compile Include="Assets\Scripts\Editor\Fixes\Core\ComponentFix.cs" />
+     <Compile Include="Assets\Scripts\Editor\Fixes\Core\GameObjectFix.cs" />
+     <Compile Include="Assets\Scripts\Editor\Fixes\Core\IFix.cs" />
+     <Compile Include="Assets\Scripts\Editor\Fixes\GameObjects\HiddenIsActiveFix.cs" />
+     <Compile Include="Assets\Scripts\Editor\Fixes\PrefabsFixes.cs" />
      <Compile Include="Assets\Scripts\Editor\MenuItems.cs" />
-     <Compile Include="Assets\Scripts\Editor\PrefabsAnalysis.cs" />
      <Compile Include="Assets\Scripts\Editor\Services\PrefabsAnalysisService.cs" />
+     <Compile Include="Assets\Scripts\Editor\Services\PrefabsFixesService.cs" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>D:/git/prefabs-static-analysis-example/Analysis/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>
@@ -269,9 +276,6 @@
  </Reference>
  <Reference Include="Unity.Locator">
  <HintPath>C:/Program Files/Unity2018/Editor/Data/Managed/Unity.Locator.dll</HintPath>
- </Reference>
- <Reference Include="Assembly-CSharp">
- <HintPath>D:/git/prefabs-static-analysis-example/Analysis/Library/ScriptAssemblies/Assembly-CSharp.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity2018/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

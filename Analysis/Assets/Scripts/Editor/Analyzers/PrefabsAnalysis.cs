@@ -6,7 +6,7 @@ using Editor.Analyzers.Core;
 using Editor.Diagnostics.Core;
 using UnityEngine;
 
-namespace Editor
+namespace Editor.Analyzers
 {
   public class PrefabsAnalysis
   {
@@ -111,7 +111,7 @@ namespace Editor
       return result;
     }
 
-    private static IEnumerable<IDiagnostic> ExecuteOn(GameObject instance)
+    public static IEnumerable<IDiagnostic> ExecuteOn(GameObject instance)
     {
       instance.GetComponents(ComponentsBuffer);
 

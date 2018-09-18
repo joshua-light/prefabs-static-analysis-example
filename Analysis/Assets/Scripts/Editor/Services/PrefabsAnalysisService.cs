@@ -1,4 +1,5 @@
 using System;
+using Editor.Analyzers;
 using Editor.Common;
 using Editor.Diagnostics.Core;
 using UnityEditor;
