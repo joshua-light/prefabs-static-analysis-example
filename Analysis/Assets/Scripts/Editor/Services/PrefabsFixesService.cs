@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -13,6 +14,7 @@ namespace Editor.Services
   public class PrefabsFixesService
   {
     private static readonly TimeSpan UpdateDelay = TimeSpan.FromMilliseconds(250);
+    private static readonly List<IDiagnostic> DiagnosticsBuffer = new List<IDiagnostic>();
     
     private static DateTime _updateTime = DateTime.Now;
     
@@ -53,8 +55,10 @@ namespace Editor.Services
 
     private static void ApplyFix(GameObject gameObject)
     {
-      var diagnostics = PrefabsAnalysis.ExecuteOn(gameObject);
-      foreach (var diagnostic in diagnostics)
+      DiagnosticsBuffer.Clear();
+      PrefabsAnalysis.GatherDiagnostics(gameObject, DiagnosticsBuffer);
+
+      foreach (var diagnostic in DiagnosticsBuffer)
         ApplyFix(diagnostic);
 
       EditorUtility.SetDirty(gameObject);

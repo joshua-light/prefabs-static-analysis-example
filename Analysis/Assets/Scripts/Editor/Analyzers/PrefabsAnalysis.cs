@@ -34,6 +34,7 @@ namespace Editor.Analyzers
 
     private static readonly AnalysisSession Session = new AnalysisSession();
 
+    private static readonly List<IDiagnostic> DiagnosticsBuffer = new List<IDiagnostic>();
     private static readonly List<Component> ComponentsBuffer = new List<Component>();
 
     #region Initialization
@@ -42,30 +43,16 @@ namespace Editor.Analyzers
     {
       var types = Assembly.GetExecutingAssembly().GetTypes().ToArray();
 
-      _gameObjectAnalyzers = GetAnalyzers<GameObjectAnalyzer>(types).ToArray();
-      _componentAnalyzers = GetAnalyzers<ComponentAnalyzer>(types).ToArray();
-    }
-
-    public static void Refresh()
-    {
-      Initialize();
-      
-      Session.Clear();
+      _gameObjectAnalyzers = GetAnalyzers<GameObjectAnalyzer>(types);
+      _componentAnalyzers = GetAnalyzers<ComponentAnalyzer>(types);
     }
 
     private static T[] GetAnalyzers<T>(IEnumerable<Type> types) =>
       types
         .Where(x => typeof (T).IsAssignableFrom(x) && x != typeof (T) && !x.IsAbstract)
-        .OrderByDescending(AnalysisPriority)
         .Select(Activator.CreateInstance)
         .Cast<T>()
         .ToArray();
-
-    private static int AnalysisPriority(Type type)
-    {
-      // There can be implemented some kind of priority sorting.
-      return 0;
-    }
 
     #endregion
 
@@ -86,18 +73,21 @@ namespace Editor.Analyzers
       var diagnostic = Session.Diagnostic(id);
       if (diagnostic != null)
         return diagnostic;
+      
+      DiagnosticsBuffer.Clear();
 
-      diagnostic = ExecuteImpl(instance);
+      diagnostic = Execute(instance, DiagnosticsBuffer);
       Session.Add(id, diagnostic);
 
       return diagnostic;
     }
 
-    private static IDiagnostic ExecuteImpl(GameObject instance)
+    private static IDiagnostic Execute(GameObject instance, List<IDiagnostic> diagnostics)
     {
       var result = Diagnostic.None;
 
-      foreach (var diagnostic in ExecuteOn(instance))
+      GatherDiagnostics(instance, diagnostics);
+      foreach (var diagnostic in diagnostics)
       {
         if (!diagnostic.Severity.IsGreaterThen(result.Severity))
           continue;
@@ -111,34 +101,31 @@ namespace Editor.Analyzers
       return result;
     }
 
-    public static IEnumerable<IDiagnostic> ExecuteOn(GameObject instance)
+    public static void GatherDiagnostics(GameObject instance, List<IDiagnostic> diagnostics)
     {
       instance.GetComponents(ComponentsBuffer);
 
       var components = ComponentsBuffer;
       for (int i = 0, iLength = components.Count; i < iLength; i++)
-      {
-        foreach (var diagnostic in ExecuteOn(components[i]))
-          yield return diagnostic;
-      }
+        GatherDiagnostics(components[i], diagnostics);
 
       var analyzers = _gameObjectAnalyzers;
       for (int i = 0, iLength = analyzers.Length; i < iLength; i++)
       {
         var diagnostic = analyzers[i].Execute(instance);
         if (diagnostic != Diagnostic.None)
-          yield return diagnostic;
+          diagnostics.Add(diagnostic);
       }
     }
 
-    private static IEnumerable<IDiagnostic> ExecuteOn(Component component)
+    private static void GatherDiagnostics(Component component, List<IDiagnostic> diagnostics)
     {
       var analyzers = _componentAnalyzers;
       for (int i = 0, length = analyzers.Length; i < length; i++)
       {
         var diagnostic = analyzers[i].Execute(component);
         if (diagnostic != Diagnostic.None)
-          yield return diagnostic;
+          diagnostics.Add(diagnostic);
       }
     }
   }

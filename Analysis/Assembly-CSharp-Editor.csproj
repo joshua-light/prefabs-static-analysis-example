@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\Editor\Analyzers\GameObjects\HiddenIsActiveAnalyzer.cs" />
      <Compile Include="Assets\Scripts\Editor\Analyzers\PrefabsAnalysis.cs" />
      <Compile Include="Assets\Scripts\Editor\Common\GameObjectExtensions.cs" />
+     <Compile Include="Assets\Scripts\Editor\Common\SimpleWatch.cs" />
      <Compile Include="Assets\Scripts\Editor\Diagnostics\Core\Diagnostic.cs" />
      <Compile Include="Assets\Scripts\Editor\Diagnostics\Core\DiagnosticId.cs" />
      <Compile Include="Assets\Scripts\Editor\Diagnostics\Core\DiagnosticSeverity.cs" />

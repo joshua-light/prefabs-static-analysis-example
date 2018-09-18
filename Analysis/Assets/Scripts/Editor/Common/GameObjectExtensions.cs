@@ -8,9 +8,23 @@ namespace Editor.Common
     private static readonly List<GameObject> GameObjectsBuffer = new List<GameObject>(10);
     
     // The result is read-only!
+    public static List<GameObject> RootWithChildren(this GameObject self)
+    {
+      var result = GameObjectsBuffer;
+      
+      result.Clear();
+      result.Add(self);
+      
+      GetRootWithChildrenRecursively(self, result);
+
+      return result;
+    }
+    
+    // The result is read-only!
     public static List<GameObject> Children(this GameObject self)
     {
       var result = GameObjectsBuffer;
+      
       result.Clear();
 
       GetRootWithChildrenRecursively(self, result);
