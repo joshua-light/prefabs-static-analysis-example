@@ -15,8 +15,8 @@ namespace Editor.Fixes
     {
       var types = Assembly.GetExecutingAssembly().GetTypes();
 
-      var gameObjectFixes = GetFixes<GameObjectFix>(types);
-      var componentFixes = GetFixes<ComponentFix>(types);
+      var gameObjectFixes = InstantiatedFixes<GameObjectFix>(types);
+      var componentFixes = InstantiatedFixes<ComponentFix>(types);
 
       FixesByDiagnostic = gameObjectFixes
         .Concat(componentFixes)
@@ -24,7 +24,7 @@ namespace Editor.Fixes
         .ToDictionary(x => x.Key, x => x.ToArray());
     }
 
-    private static IEnumerable<IFix> GetFixes<T>(Type[] types)
+    private static IEnumerable<IFix> InstantiatedFixes<T>(Type[] types)
     {
       return types
         .Where(x => typeof (T).IsAssignableFrom(x) && x != typeof (T) && !x.IsAbstract)
